@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\chris\\GitHub\\glomerular-identifier\\glomerular-identifier.csproj": {}
+    "C:\\Users\\chris\\GitHub\\glomerular-identifier\\BlazorApp\\BlazorApp.csproj": {}
   },
   "projects": {
-    "C:\\Users\\chris\\GitHub\\glomerular-identifier\\glomerular-identifier.csproj": {
+    "C:\\Users\\chris\\GitHub\\glomerular-identifier\\BlazorApp\\BlazorApp.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\chris\\GitHub\\glomerular-identifier\\glomerular-identifier.csproj",
-        "projectName": "glomerular-identifier",
-        "projectPath": "C:\\Users\\chris\\GitHub\\glomerular-identifier\\glomerular-identifier.csproj",
+        "projectUniqueName": "C:\\Users\\chris\\GitHub\\glomerular-identifier\\BlazorApp\\BlazorApp.csproj",
+        "projectName": "BlazorApp",
+        "projectPath": "C:\\Users\\chris\\GitHub\\glomerular-identifier\\BlazorApp\\BlazorApp.csproj",
         "packagesPath": "C:\\Users\\chris\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\chris\\GitHub\\glomerular-identifier\\obj\\",
+        "outputPath": "C:\\Users\\chris\\GitHub\\glomerular-identifier\\BlazorApp\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\chris\\AppData\\Roaming\\NuGet\\NuGet.Config"

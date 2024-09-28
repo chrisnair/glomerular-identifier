@@ -4,8 +4,6 @@
 @rendermode InteractiveServer
 
 <div id="openseadragon-viewer" style="width: 800px; height: 600px;"></div>
-<button @onclick="ShowPrompt">Button</button>
-
 @code {
     private IJSObjectReference? module;
     private string? result;
@@ -39,15 +37,6 @@
                     "https://openseadragon.github.io/example-images/highsmith/highsmith.dzi"
                 }
             });
-        }
-    }
-    public async void ShowPrompt()
-    {
-        if (module is not null)
-        {
-            result = await module.InvokeAsync<string>(
-                "log", "What's your name?");
-            StateHasChanged();
         }
     }
 

@@ -1,9 +1,10 @@
 @page "/image-viewer"
 @inject IJSRuntime JS
 @implements IAsyncDisposable
-@rendermode InteractiveServer
 
-<div @onwheel="e => MouseWheelEventHandler(e)" id="openseadragon-viewer" style="width: 800px; height: 600px;"></div>
+<div @onwheel="MouseWheelEventHandler" @onclick="MouseEventHandler" id="openseadragon-viewer" style="width: 800px; height: 600px;"></div>
+Zoom Level: @Math.Round(AppState.ZoomLevel, 3)
+Position: (@Math.Round(AppState.CenterX,3), @Math.Round(AppState.CenterY,3))
 @code {
 
     [CascadingParameter]
@@ -25,6 +26,7 @@
             module = await JS.InvokeAsync<IJSObjectReference>("import",
                 "./Components/Pages/ImageViewer.razor.js");
             await InitializeViewerAsync();
+            StateHasChanged();
         }
     }
 
@@ -40,23 +42,34 @@
                     "https://openseadragon.github.io/example-images/highsmith/highsmith.dzi"
                 },
         
-                initialZoom = AppState.ZoomLevel
+                initialZoom = AppState.ZoomLevel,
+                initialCenterX=AppState.CenterX,
+                initialCenterY = AppState.CenterY
+                
             });
         }
                 Console.WriteLine(AppState.ZoomLevel);
     }
 
-    private async Task MouseWheelEventHandler(WheelEventArgs eventArgs)
+    private void MouseEventHandler(MouseEventArgs eventArgs)
     {
-        if(eventArgs.DeltaY>0) // zooming out
+        SaveViewPortPosition();
+    }
+
+    private void MouseWheelEventHandler(WheelEventArgs eventArgs)
+    {
+      SaveViewPortPosition();
+    }
+
+    private async void SaveViewPortPosition()
+    {
+        if(module is not null)
         {
-            AppState.ZoomLevel/=1.1;
+            var position = await module.InvokeAsync<ViewportPosition>("getViewerCoordinates");
+            AppState.ZoomLevel = position.ZoomLevel;
+            AppState.CenterX = position.CenterX;
+            AppState.CenterY = position.CenterY;
         }
-        if(eventArgs.DeltaY<0) // zooming in
-        {
-            AppState.ZoomLevel*=1.1;
-        }
-        Console.WriteLine(AppState.ZoomLevel);
 
     }
 
@@ -64,7 +77,21 @@
     {
         if (module is not null)
         {
-            await module.DisposeAsync();
+            try
+            {
+                await module.DisposeAsync();
+            }
+            catch(JSDisconnectedException)
+            {
+
+            }
         }
+    }
+
+    private class ViewportPosition
+    {
+        public double CenterX {get; set;}
+        public double CenterY {get; set;}
+        public double ZoomLevel {get; set;}
     }
 }

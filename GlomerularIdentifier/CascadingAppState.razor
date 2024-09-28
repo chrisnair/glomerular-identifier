@@ -104,6 +104,38 @@
         }
     }
 
+    private double centerX = 0;
+    public double CenterX
+    {
+        get => centerX;
+        set
+        {
+            centerX = value;
+            StateHasChanged();
+            NotifyPropertyChanged(new("CenterX", value));
+            new Task(async () =>
+            {
+                await Save();
+            }).Start();
+        }
+    }
+
+      private double centerY = 0;
+    public double CenterY
+    {
+        get => centerY;
+        set
+        {
+            centerY = value;
+            StateHasChanged();
+            NotifyPropertyChanged(new("CenterY", value));
+            new Task(async () =>
+            {
+                await Save();
+            }).Start();
+        }
+    }
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)

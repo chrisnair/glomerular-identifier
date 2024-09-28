@@ -7,4 +7,7 @@ public class AppState : IAppState
 
     public double ZoomLevel { get; set; }
     public DateTime LastStorageSaveTime { get; set; }
+
+    public double CenterX {get; set;}
+    public double CenterY {get; set;}
 }

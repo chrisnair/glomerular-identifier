@@ -6,6 +6,15 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
+builder.Services.AddCors(options => 
+{
+	options.AddPolicy("NewPolicy", builder =>
+	builder.AllowAnyOrigin()
+		.AllowAnyMethod()
+		.AllowAnyHeader());
+});
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -24,4 +33,8 @@ app.UseAntiforgery();
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
 
+app.UseRouting(); 
+app.UseAntiforgery();
+app.UseCors("NewPolicy");
+app.UseAuthorization(); 
 app.Run();

@@ -1,4 +1,3 @@
-@page "/image-viewer"
 @inject IJSRuntime JS
 @implements IAsyncDisposable
 
@@ -39,7 +38,7 @@ Position: (@Math.Round(AppState.CenterX,3), @Math.Round(AppState.CenterY,3))
             {
                 tileSources = new[]
                 {
-                    "https://openseadragon.github.io/example-images/highsmith/highsmith.dzi"
+                    "./images/brady_dzi.dzi"
                 },
         
                 initialZoom = AppState.ZoomLevel,
@@ -48,7 +47,6 @@ Position: (@Math.Round(AppState.CenterX,3), @Math.Round(AppState.CenterY,3))
                 
             });
         }
-                Console.WriteLine(AppState.ZoomLevel);
     }
 
     private void MouseEventHandler(MouseEventArgs eventArgs)

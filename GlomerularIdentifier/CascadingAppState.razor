@@ -3,6 +3,7 @@
 @using System.Text.Json;
 @namespace GlomerularIdentifier
 @inject ProtectedLocalStorage localStorage
+@inject NavigationManager navMan
 @implements IAppState
 <CascadingValue Value="this">
     @ChildContent
@@ -104,7 +105,7 @@
         }
     }
 
-    private double centerX = 0;
+    private double centerX = .5;
     public double CenterX
     {
         get => centerX;
@@ -120,7 +121,7 @@
         }
     }
 
-      private double centerY = 0;
+      private double centerY = .5;
     public double CenterY
     {
         get => centerY;
@@ -199,5 +200,11 @@
         {
             
         }
+    }
+
+    public async Task Clear()
+    {
+        await localStorage.DeleteAsync(StorageKey);
+        navMan.NavigateTo(navMan.Uri, true);
     }
 }

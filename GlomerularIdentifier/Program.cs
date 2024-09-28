@@ -1,4 +1,4 @@
-using BlazorApp.Components;
+using GlomerularIdentifier.Components;
 
 var builder = WebApplication.CreateBuilder(args);
 

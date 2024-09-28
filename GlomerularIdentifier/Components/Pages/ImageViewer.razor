@@ -3,10 +3,13 @@
 @implements IAsyncDisposable
 @rendermode InteractiveServer
 
-<div id="openseadragon-viewer" style="width: 800px; height: 600px;"></div>
+<div @onwheel="e => MouseWheelEventHandler(e)" id="openseadragon-viewer" style="width: 800px; height: 600px;"></div>
 @code {
+
+    [CascadingParameter]
+    public required CascadingAppState AppState {get; set;}
+
     private IJSObjectReference? module;
-    private string? result;
 
     protected async override Task OnAfterRenderAsync(bool firstRender)
     {
@@ -21,8 +24,8 @@
             */
             module = await JS.InvokeAsync<IJSObjectReference>("import",
                 "./Components/Pages/ImageViewer.razor.js");
+            await InitializeViewerAsync();
         }
-        await InitializeViewerAsync();
     }
 
     private async Task InitializeViewerAsync()
@@ -35,9 +38,26 @@
                 tileSources = new[]
                 {
                     "https://openseadragon.github.io/example-images/highsmith/highsmith.dzi"
-                }
+                },
+        
+                initialZoom = AppState.ZoomLevel
             });
         }
+                Console.WriteLine(AppState.ZoomLevel);
+    }
+
+    private async Task MouseWheelEventHandler(WheelEventArgs eventArgs)
+    {
+        if(eventArgs.DeltaY>0) // zooming out
+        {
+            AppState.ZoomLevel/=1.1;
+        }
+        if(eventArgs.DeltaY<0) // zooming in
+        {
+            AppState.ZoomLevel*=1.1;
+        }
+        Console.WriteLine(AppState.ZoomLevel);
+
     }
 
     async ValueTask IAsyncDisposable.DisposeAsync()

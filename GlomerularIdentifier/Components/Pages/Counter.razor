@@ -1,19 +1,22 @@
 ﻿@page "/counter"
-@rendermode InteractiveServer
 
 <PageTitle>Counter</PageTitle>
 
 <h1>Counter</h1>
 
-<p role="status">Current count: @currentCount</p>
+<p role="status">Current count: @AppState.Count</p>
 
 <button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
 
 @code {
-    private int currentCount = 0;
+
+    [CascadingParameter]
+    public required CascadingAppState AppState { get; set; }
 
     private void IncrementCount()
     {
-        currentCount++;
+        Console.WriteLine("clicked");
+        // This is the only place AppState.Count is incremented
+        AppState.Count++;
     }
 }

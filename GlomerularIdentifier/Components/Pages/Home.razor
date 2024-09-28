@@ -2,7 +2,25 @@
 
 <PageTitle>Home</PageTitle>
 
-<h1>Hello, world!</h1>
-<a href="/image-viewer">Image viewer</a>
+<p>
+    Click the button to test the statefulness. Click 
+    <a href="/image-viewer">here</a> to go to the DeepZoom viewer.
+</p>
 
-Welcome to your new app.
+<button class = "btn btn-primary" @onclick="UpdateMessage">Update Message</button>
+
+<br />
+<br />
+<h3>@AppState.Message</h3>
+
+
+
+@code {
+    [CascadingParameter]
+    public required CascadingAppState AppState {get; set;}
+
+    void UpdateMessage()
+    {
+        AppState.Message = $"Message updated at {DateTime.Now.ToLongTimeString()}";
+    }
+}

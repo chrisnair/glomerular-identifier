@@ -1,6 +1,7 @@
 @page "/image-viewer"
 @inject IJSRuntime JS
 @implements IAsyncDisposable
+@rendermode InteractiveServer
 
 <div id="openseadragon-viewer" style="width: 800px; height: 600px;"></div>
 <button @onclick="ShowPrompt">Button</button>
@@ -21,10 +22,25 @@
                 ./Pages/JsCollocation2.razor.js (.NET 7 or earlier)
             */
             module = await JS.InvokeAsync<IJSObjectReference>("import",
-                "./Componenets/Pages/ImageViewer.razor.js");
+                "./Components/Pages/ImageViewer.razor.js");
         }
+        await InitializeViewerAsync();
     }
 
+    private async Task InitializeViewerAsync()
+    {
+        if(module is not null)
+        {
+
+            await module.InvokeVoidAsync("initializeOpenSeadragon", "openseadragon-viewer", new
+            {
+                tileSources = new[]
+                {
+                    "https://openseadragon.github.io/example-images/highsmith/highsmith.dzi"
+                }
+            });
+        }
+    }
     public async void ShowPrompt()
     {
         if (module is not null)

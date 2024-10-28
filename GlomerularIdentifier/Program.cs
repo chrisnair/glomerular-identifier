@@ -1,4 +1,4 @@
-using BlazorApp.Components;
+using GlomerularIdentifier.Components;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,6 +28,22 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseStaticFiles();
+
+
+// Configure to serve static files and add a MIME type for .dzi
+app.UseStaticFiles(new StaticFileOptions
+{
+    ServeUnknownFileTypes = true, // Allow serving files with unknown MIME types
+    DefaultContentType = "application/xml", // Default MIME type for .dzi
+    OnPrepareResponse = ctx =>
+    {
+        if (ctx.File.Name.EndsWith(".dzi"))
+        {
+            ctx.Context.Response.ContentType = "application/xml"; // Force .dzi to be treated as XML
+        }
+    }
+});
+
 app.UseAntiforgery();
 
 app.MapRazorComponents<App>()

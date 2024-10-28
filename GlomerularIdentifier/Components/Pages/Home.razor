@@ -1,0 +1,18 @@
+﻿@page "/"
+
+<PageTitle>Home</PageTitle>
+<h1>DeepZoom Image Viewer</h1>
+<ImageViewer></ImageViewer>
+
+
+
+
+@code {
+    [CascadingParameter]
+    public required CascadingAppState AppState {get; set;}
+
+    void UpdateMessage()
+    {
+        AppState.Message = $"Message updated at {DateTime.Now.ToLongTimeString()}";
+    }
+}

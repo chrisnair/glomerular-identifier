@@ -1,0 +1,7 @@
+<button class = "btn btn-primary" @onclick="AppState.Clear">Reset App State</button>
+
+@code
+{
+    [CascadingParameter]
+    public required CascadingAppState AppState {get; set;}
+}

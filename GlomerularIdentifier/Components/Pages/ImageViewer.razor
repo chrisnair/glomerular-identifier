@@ -1,0 +1,95 @@
+@inject IJSRuntime JS
+@implements IAsyncDisposable
+
+<div @onwheel="MouseWheelEventHandler" @onclick="MouseEventHandler" id="openseadragon-viewer" style="width: 800px; height: 600px;"></div>
+Zoom Level: @Math.Round(AppState.ZoomLevel, 3)
+Position: (@Math.Round(AppState.CenterX,3), @Math.Round(AppState.CenterY,3))
+@code {
+
+    [CascadingParameter]
+    public required CascadingAppState AppState {get; set;}
+
+    private IJSObjectReference? module;
+
+    protected async override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            /*
+                Change the {PATH} placeholder in the next line to the path of
+                the collocated JS file in the app. Examples:
+
+                ./Components/Pages/JsCollocation2.razor.js (.NET 8 or later)
+                ./Pages/JsCollocation2.razor.js (.NET 7 or earlier)
+            */
+            module = await JS.InvokeAsync<IJSObjectReference>("import",
+                "./Components/Pages/ImageViewer.razor.js");
+            await InitializeViewerAsync();
+            StateHasChanged();
+        }
+    }
+
+    private async Task InitializeViewerAsync()
+    {
+        if(module is not null)
+        {
+
+            await module.InvokeVoidAsync("initializeOpenSeadragon", "openseadragon-viewer", new
+            {
+                tileSources = new[]
+                {
+                    "./images/brady_dzi.dzi"
+                },
+        
+                initialZoom = AppState.ZoomLevel,
+                initialCenterX=AppState.CenterX,
+                initialCenterY = AppState.CenterY
+                
+            });
+        }
+    }
+
+    private void MouseEventHandler(MouseEventArgs eventArgs)
+    {
+        SaveViewPortPosition();
+    }
+
+    private void MouseWheelEventHandler(WheelEventArgs eventArgs)
+    {
+      SaveViewPortPosition();
+    }
+
+    private async void SaveViewPortPosition()
+    {
+        if(module is not null)
+        {
+            var position = await module.InvokeAsync<ViewportPosition>("getViewerCoordinates");
+            AppState.ZoomLevel = position.ZoomLevel;
+            AppState.CenterX = position.CenterX;
+            AppState.CenterY = position.CenterY;
+        }
+
+    }
+
+    async ValueTask IAsyncDisposable.DisposeAsync()
+    {
+        if (module is not null)
+        {
+            try
+            {
+                await module.DisposeAsync();
+            }
+            catch(JSDisconnectedException)
+            {
+
+            }
+        }
+    }
+
+    private class ViewportPosition
+    {
+        public double CenterX {get; set;}
+        public double CenterY {get; set;}
+        public double ZoomLevel {get; set;}
+    }
+}
